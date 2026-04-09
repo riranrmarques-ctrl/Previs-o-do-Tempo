@@ -1,27 +1,236 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<title>Duna News</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Previsão do Tempo - Ilhéus</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    body {
+      background:
+        linear-gradient(to bottom right, rgba(15, 23, 42, 0.55), rgba(30, 41, 59, 0.35)),
+        url("https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80") center center / cover no-repeat;
+    }
+
+    .container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 40px 50px;
+      background: linear-gradient(to top, rgba(0,0,0,0.18), rgba(0,0,0,0.05));
+    }
+
+    .topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .cidade {
+      font-size: 64px;
+      font-weight: 700;
+      line-height: 1;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.35);
+    }
+
+    .agora {
+      text-align: right;
+    }
+
+    .temperatura {
+      font-size: 110px;
+      font-weight: 700;
+      line-height: 0.95;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.35);
+    }
+
+    .condicao {
+      font-size: 30px;
+      margin-top: 8px;
+      font-weight: 600;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.35);
+    }
+
+    .detalhes {
+      display: flex;
+      gap: 22px;
+      margin-top: 16px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      font-size: 22px;
+    }
+
+    .detalhe-box {
+      background: rgba(255,255,255,0.12);
+      padding: 10px 16px;
+      border-radius: 14px;
+      backdrop-filter: blur(6px);
+    }
+
+    .rodape {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .dia {
+      background: rgba(255,255,255,0.12);
+      border-radius: 22px;
+      padding: 24px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+    }
+
+    .dia-nome {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .dia-condicao {
+      font-size: 22px;
+      line-height: 1.25;
+      min-height: 56px;
+    }
+
+    .dia-temp {
+      margin-top: 18px;
+      font-size: 32px;
+      font-weight: 700;
+    }
+
+    .fonte {
+      position: absolute;
+      left: 50px;
+      bottom: 14px;
+      font-size: 14px;
+      opacity: 0.85;
+    }
+
+    @media (max-width: 1200px) {
+      .cidade {
+        font-size: 48px;
+      }
+
+      .temperatura {
+        font-size: 82px;
+      }
+
+      .condicao {
+        font-size: 24px;
+      }
+
+      .detalhes {
+        font-size: 18px;
+      }
+
+      .dia-nome {
+        font-size: 22px;
+      }
+
+      .dia-condicao {
+        font-size: 18px;
+      }
+
+      .dia-temp {
+        font-size: 26px;
+      }
+    }
+  </style>
 </head>
+<body>
+  <div class="container">
+    <div class="topo">
+      <div>
+        <div class="cidade">Ilhéus</div>
+      </div>
 
-<body style="background:black; color:white; font-family:Arial;">
+      <div class="agora">
+        <div id="temperaturaAtual" class="temperatura">--°</div>
+        <div id="condicaoAtual" class="condicao">Carregando...</div>
 
-<h1 id="titulo">Carregando...</h1>
-<img id="img" width="600">
+        <div class="detalhes">
+          <div class="detalhe-box">Máx: <span id="maximaHoje">--°</span></div>
+          <div class="detalhe-box">Mín: <span id="minimaHoje">--°</span></div>
+        </div>
+      </div>
+    </div>
 
-<script>
-async function carregar() {
+    <div class="rodape">
+      <div class="dia">
+        <div id="dia1Nome" class="dia-nome">Hoje</div>
+        <div id="dia1Condicao" class="dia-condicao">--</div>
+        <div id="dia1Temp" class="dia-temp">--° / --°</div>
+      </div>
 
-  const res = await fetch("/.netlify/functions/news");
-  const data = await res.json();
+      <div class="dia">
+        <div id="dia2Nome" class="dia-nome">Amanhã</div>
+        <div id="dia2Condicao" class="dia-condicao">--</div>
+        <div id="dia2Temp" class="dia-temp">--° / --°</div>
+      </div>
 
-  document.getElementById("titulo").innerText = data[0].titulo;
-  document.getElementById("img").src = data[0].imagem;
-}
+      <div class="dia">
+        <div id="dia3Nome" class="dia-nome">Próximo dia</div>
+        <div id="dia3Condicao" class="dia-condicao">--</div>
+        <div id="dia3Temp" class="dia-temp">--° / --°</div>
+      </div>
+    </div>
+  </div>
 
-carregar();
-</script>
+  <div class="fonte">Fonte: previsão meteorológica</div>
 
+  <script>
+    function preencherTela(previsao) {
+      document.getElementById("temperaturaAtual").innerText = `${previsao.atual.temp}°`;
+      document.getElementById("condicaoAtual").innerText = previsao.atual.condicao;
+      document.getElementById("maximaHoje").innerText = `${previsao.atual.max}°`;
+      document.getElementById("minimaHoje").innerText = `${previsao.atual.min}°`;
+
+      document.getElementById("dia1Nome").innerText = previsao.dias[0]?.nome || "Hoje";
+      document.getElementById("dia1Condicao").innerText = previsao.dias[0]?.condicao || "--";
+      document.getElementById("dia1Temp").innerText = `${previsao.dias[0]?.max ?? "--"}° / ${previsao.dias[0]?.min ?? "--"}°`;
+
+      document.getElementById("dia2Nome").innerText = previsao.dias[1]?.nome || "Amanhã";
+      document.getElementById("dia2Condicao").innerText = previsao.dias[1]?.condicao || "--";
+      document.getElementById("dia2Temp").innerText = `${previsao.dias[1]?.max ?? "--"}° / ${previsao.dias[1]?.min ?? "--"}°`;
+
+      document.getElementById("dia3Nome").innerText = previsao.dias[2]?.nome || "Próximo dia";
+      document.getElementById("dia3Condicao").innerText = previsao.dias[2]?.condicao || "--";
+      document.getElementById("dia3Temp").innerText = `${previsao.dias[2]?.max ?? "--"}° / ${previsao.dias[2]?.min ?? "--"}°`;
+    }
+
+    function carregarPrevisao() {
+      fetch("/.netlify/functions/weather")
+        .then(res => {
+          if (!res.ok) throw new Error("Erro ao carregar previsão");
+          return res.json();
+        })
+        .then(data => preencherTela(data))
+        .catch(() => {
+          document.getElementById("condicaoAtual").innerText = "Erro ao carregar previsão";
+        });
+    }
+
+    carregarPrevisao();
+
+    // Atualiza automaticamente a cada 30 minutos
+    setInterval(carregarPrevisao, 1800000);
+  </script>
 </body>
 </html>
